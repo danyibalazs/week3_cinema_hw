@@ -49,14 +49,18 @@ class Customer
     return films
   end
 
-  def buy_ticket(film)
+  def buy_ticket(film, screening)
     return if @funds < film.price
+    return if screening.capacity == 0
     @funds -= film.price
     self.update()
     ticket = Ticket.new({
       "customer_id" => @id,
-      "film_id" => film.id
+      "film_id" => film.id,
+      "screening_id" => screening.id
       })
+    screening.capacity -= 1
+    screening.update()
     ticket.save()
   end
 
