@@ -60,6 +60,14 @@ class Customer
     ticket.save()
   end
 
+  def ticket_count()
+    sql = "SELECT * FROM tickets
+    WHERE customer_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    return tickets.count()
+  end
+
   def self.all()
     sql = "SELECT * FROM customers"
     results = SqlRunner.run(sql)
