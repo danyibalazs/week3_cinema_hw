@@ -49,6 +49,17 @@ class Customer
     return films
   end
 
+  def buy_ticket(film)
+    return if @funds < film.price
+    @funds -= film.price
+    self.update()
+    ticket = Ticket.new({
+      "customer_id" => @id,
+      "film_id" => film.id
+      })
+    ticket.save()
+  end
+
   def self.all()
     sql = "SELECT * FROM customers"
     results = SqlRunner.run(sql)

@@ -47,7 +47,6 @@ class Film
     results = SqlRunner.run(sql, value)
     customers = results.map{|customer| Customer.new(customer)}
     return customers
-
   end
 
   def self.all()
