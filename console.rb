@@ -30,7 +30,7 @@ film1.save()
 
 film2 = Film.new({
   "title" => "Kill Bill",
-  "price" => 10
+  "price" => 9
   })
 film2.save()
 
