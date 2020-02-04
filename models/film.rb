@@ -57,20 +57,38 @@ class Film
     return customers.count()
   end
 
-  def popular_screening()
-    sql = "SELECT screenings.screen_time FROM tickets
-    INNER JOIN screenings ON
-    tickets.screening_id = screenings.id
-    WHERE tickets.film_id = $1"
+  def screenings()
+    sql = "SELECT * FROM screenings WHERE film_id = $1"
     values = [@id]
-    results = SqlRunner.run(sql, values)
-    screenings_array = results.map{|screening| screening["screen_time"]}
-    return if screenings_array == []
-    frequencies = Hash.new(0)
-    screenings_array.each{|id| frequencies[id] += 1}
-    frequencies = frequencies.sort_by {|key, value| value}
-    sorted_screenings = frequencies.reverse!
-    return sorted_screenings[0][0]
+
+  end
+
+  def popular_screening()
+    all_screenings_for_film = screenings()
+    sorted_screenings_by_tickets_sold = all_screenings_for_film.sort_by {|screening| screening.tickets().count()}
+    return sorted_screenings_by_tickets_sold.last()
+    # sql = "SELECT screenings.screen_time FROM tickets
+    # INNER JOIN screenings ON
+    # tickets.screening_id = screenings.id
+    # WHERE tickets.film_id = $1"
+    # values = [@id]
+    # results = SqlRunner.run(sql, values)
+    # screenings_array = results.map{|screening| screening["screen_time"]}
+    # return if screenings_array == []
+    # frequencies = Hash.new(0)
+    # screenings_array.each{|id| frequencies[id] += 1}
+    # frequencies = frequencies.sort_by {|key, value| value}
+    # sorted_screenings = frequencies.reverse!
+    # return sorted_screenings[0][0]
+  end
+
+  def self.find(id)
+    sql = "SELECT * FROM films WHERE id = $1"
+    value = [id]
+    result = SqlRunner.run(sql, value)
+    # film = Film.new(result)
+    film = Film.new(result.first())
+    return film
   end
 
   def self.all()

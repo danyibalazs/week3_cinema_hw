@@ -51,12 +51,12 @@ class Customer
 
   def buy_ticket(film, screening)
     return if @funds < film.price
-    return if screening.capacity == 0
-    return if film.id != screening.film_id
+    return if screening.seats_left == 0
+    # return if film.id != screening.film_id
     @funds -= film.price
-    self.update()
-    screening.capacity -= 1
-    screening.update()
+    update()
+    # screening.capacity -= 1
+    # screening.update()
     ticket = Ticket.new({
       "customer_id" => @id,
       "film_id" => film.id,

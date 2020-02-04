@@ -39,6 +39,18 @@ class Screening
     SqlRunner.run(sql, values)
   end
 
+  def tickets()
+    sql = "SELECT * FROM tickets WHERE screening_id = $1"
+    values = [@id]
+    # continue
+  end
+
+  def seats_left()
+    number_of_tickets_sold = tickets().count()
+    seats_left = capacity - number_of_tickets_sold
+    return seats_left
+  end
+
   def self.all()
     sql = "SELECT * FROM screenings"
     results = SqlRunner.run(sql)
@@ -50,4 +62,5 @@ class Screening
     sql = "DELETE FROM screenings"
     SqlRunner.run(sql)
   end
+
 end
